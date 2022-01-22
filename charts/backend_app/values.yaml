@@ -1,14 +1,14 @@
 app:
-  name: chaipay-backend-api-dum
-  image: asia-east1-docker.pkg.dev/chaipay-infrastructure/chaipay-backend/chaipay-api:f24ef01112afb699e5bb749d0e8ac9ee963bd05f
+  name: <name>
+  image: <image>
   environment: integration
-  bucket_for_images: chaipay_images
-  port: 50001
+  bucket_for_images: <public-bucket-name>
+  port: <port>
 
 namespace: default
 
 cloudsql_sidecar:
-  project: chaipay-infrastructure
+  project: <project>
   region: asia-south1
   database: chaipay-test
 
@@ -34,17 +34,17 @@ hpa:
   max_replicas: 2
 
 service:
-  name: chaipay-backend-service-dum
+  name: <service-name>
   port: 80
 
 ingress:
-  name: chaipay-backend-ingress-dum
+  name: <ingress-name>
 
 dns:
-  certificate_name: chaipay-api-certificate-dum
-  domain_name: api.chaipay.in
+  certificate_name: <certificate-name>
+  domain_name: api.in
 
-global_static_ip_name: chaipay-dum
+global_static_ip_name: <global-static-ip-name>
 
 
 
