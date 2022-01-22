@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   backend-app:
   - apiVersion: v2
+    created: "2022-01-22T19:40:57.850845986Z"
+    description: A Helm chart for backend-app
+    digest: 7382128b73dc0b7a5688568506eda708f85ab01c71dd6d2e94976c31bb5552c3
+    name: backend-app
+    type: application
+    urls:
+    - https://github.com/chaipay/helm_charts/releases/download/backend-app-0.2.0/backend-app-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2022-01-22T19:38:15.640075342Z"
     description: A Helm chart for backend-app
     digest: f427f4dc0d056efcef45f48f6c6a7223fcb00c90e097b57352a96e733cd5bc13
@@ -19,4 +28,4 @@ entries:
     urls:
     - https://github.com/chaipay/helm_charts/releases/download/backend-app-0.1.0/backend-app-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-22T19:38:15.640082942Z"
+generated: "2022-01-22T19:40:57.850858486Z"
