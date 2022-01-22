@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name | quote }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.app.name | quote }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name | quote }}
+    spec:
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: google-cloud-key
+        - name: cloud-sql-secrets-volumne
+          secret:
+            secretName: cloudsql-instance-credentials
+
+      containers:
+        - name: {{ .Values.app.name | quote }}
+          image: {{ .Values.app.image | quote }}
+          volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: cloudsql-db-credentials
+                  key: dbname
+            - name: PORT
+              value: {{ .Values.app.port | quote }}
+            - name: ENVIRONMENT
+              value: {{ .Values.app.environment | quote }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: GCS_BUCKET_FOR_IMAGES
+              value: {{ .Values.app.bucket_for_images }}
+          resources:
+            limits:
+              cpu: {{ .Values.deployment.resources.limits.cpu }}
+              ephemeral-storage: {{ .Values.deployment.resources.limits.ephemeral_storage }}
+              memory: {{ .Values.deployment.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.deployment.resources.requests.cpu }}
+              ephemeral-storage: {{ .Values.deployment.resources.requests.ephemeral_storage }}
+              memory: {{ .Values.deployment.resources.requests.memory }}
+          livenessProbe:
+            httpGet:
+              path: /api/ping
+              port: 50001
+            initialDelaySeconds: {{ .Values.deployment.liveness_probe.initial_delay_seconds }}
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 4
+          readinessProbe:
+            httpGet:
+              path: /api/ping
+              port: 50001
+            initialDelaySeconds: {{ .Values.deployment.readyness_probe.initial_delay_seconds }}
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 2
+            failureThreshold: 4
+
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.23.0
+          command: [ "/cloud_sql_proxy",
+                     {{- printf "-instances=%s:%s:%s=tcp:5432"
+                         .Values.cloudsql_sidecar.project
+                         .Values.cloudsql_sidecar.region
+                         .Values.cloudsql_sidecar.database | quote }},
+                     "-credential_file=/secrets/cloudsql/sql_credentials.json" ]
+          volumeMounts:
+            - name: cloud-sql-secrets-volumne
+              mountPath: /secrets/cloudsql
+              readOnly: true
