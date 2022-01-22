@@ -2,6 +2,7 @@ app:
   name: <name>
   image: <image>
   environment: integration
+  #Create a public-bucket
   bucket_for_images: <public-bucket-name>
   port: <port>
 
@@ -42,8 +43,10 @@ ingress:
 
 dns:
   certificate_name: <certificate-name>
+  #Create a domain name on godaddy
   domain_name: api.in
 
+#Reserve a global static ip address here https://console.cloud.google.com/networking/addresses/list
 global_static_ip_name: <global-static-ip-name>
 
 
