@@ -65,7 +65,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/ping
-              port: 50001
+              port: {{.Values.app.port}}
             initialDelaySeconds: {{ .Values.deployment.liveness_probe.initial_delay_seconds }}
             periodSeconds: 10
             timeoutSeconds: 3
@@ -74,7 +74,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/ping
-              port: 50001
+              port: {{.Values.app.port}}
             initialDelaySeconds: {{ .Values.deployment.readyness_probe.initial_delay_seconds }}
             periodSeconds: 10
             timeoutSeconds: 3
