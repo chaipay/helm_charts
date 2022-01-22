@@ -1,5 +1,5 @@
 apiVersion: v2
-name: chaipay-backend
+name: backend-app
 description: A Helm chart for backend-app
 type: application
 version: 0.1.0
