@@ -27,7 +27,7 @@ deployment:
 
   liveness_probe:
     initial_delay_seconds: 100
-  readyness_probe:
+  readiness_probe:
     initial_delay_seconds: 100
 
 hpa:
