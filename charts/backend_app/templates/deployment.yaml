@@ -53,6 +53,9 @@ spec:
               value: /var/secrets/google/key.json
             - name: GCS_BUCKET_FOR_IMAGES
               value: {{ .Values.app.bucket_for_images }}
+          envFrom:
+            - configMapRef:
+                name: meraai-api-config
           resources:
             limits:
               cpu: {{ .Values.deployment.resources.limits.cpu }}
