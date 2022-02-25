@@ -92,6 +92,15 @@ spec:
                          .Values.cloudsql_sidecar.region
                          .Values.cloudsql_sidecar.database | quote }},
                      "-credential_file=/secrets/cloudsql/sql_credentials.json" ]
+          resources:
+            limits:
+              cpu: 250m
+              ephemeral-storage: 500Mi
+              memory: 500Mi
+            requests:
+              cpu: 250m
+              ephemeral-storage: 500Mi
+              memory: 500Mi
           volumeMounts:
             - name: cloud-sql-secrets-volumne
               mountPath: /secrets/cloudsql
